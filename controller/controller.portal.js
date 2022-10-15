@@ -3,6 +3,8 @@ const modalPortal = require("../model/model.portals");
 
 //validator module 
 const validator = require('validator');
+const session = require('express-session');
+const { response } = require("express");
 
 const portal = {
 
@@ -16,27 +18,49 @@ const portal = {
     },
     newUser: async (req, res) =>{
         
-        if(req.body.userType == "Merchant"){
-            //save data to merchant
-            let response = await modalPortal.saveMerchantUser(req.body.userData);
+        //validation 
+        exist = await modalPortal.checkEmail(req.body.userData.email, req.body.userData.pass); 
+        if(exist){
             res.send({
-                success: response,
+                success: false,
+                message: "User already exist"
             })
         }
+        else{
+            response = await modalPortal.saveNewUser(req.body.userData);
+            if(response){
+                res.send({
+                    success: true,
+                    message: "User already exist"
+                })
+            }
+            else{
+                res.send({
+                    success: false,
+                    message: "Error occured"
+                })
+            }
+        }
+    },
+    loginProcess: async (req, res) =>{
 
-        if(req.body.userType == "Rider"){
-            //save data to merchant
-            let response = await modalPortal.saveRiderUser(req.body.userData);
+        //check from user 
+        user = await modalPortal.checkUser(req.body);
+        if(user){
             res.send({
-                success: response,
+                success: true, 
+                data: {
+                    user: user[0].firstname, 
+                    message: "Welcome " + user[0].userType
+                }
             })
         }
-
-        if(req.body.userType == "Customer"){
-            //save data to merchant
-            let response = await modalPortal.saveCustomerUser(req.body.userData);
+        else{
             res.send({
-                success: response,
+                success: false, 
+                data: {
+                    message: "We can't find this account"
+                }
             })
         }
 

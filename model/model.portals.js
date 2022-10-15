@@ -6,9 +6,29 @@ var md5 = require('md5');
 
 const portal = {
 
-	saveMerchantUser: async  (data)=>{
-		const query = " INSERT INTO merchants (name, email, password, createdAt, updatedAt) VALUES (?, ?, ?, ?, ?)";
-		const value =  [data.merchant, data.email, md5(data.pass), new Date(), new Date()]; 
+	checkEmail: async (email, pass) =>{
+		const query = "SELECT * FROM users WHERE email =? AND password = ?"; 
+		const value = [email, md5(pass)]; 
+		const res = db.mysql(query, value)
+			.then((res)=>{
+				if(res.length) {
+					return true;
+				}
+				else{
+					return false;
+				}
+			})
+			.catch((err)=>{
+				console.log(err)
+				return false;
+			})
+		return res;
+	}, 
+	saveNewUser: async  (data) =>{
+
+		console.log(data);
+		const query = " INSERT INTO users (firstname, lastname, email, password,userType, createdAt, updatedAt) VALUES (?, ?, ?, ?, ?, ?, ?)";
+		const value =  [data.fname, data.lname, data.email,  md5(data.pass), data.userType, new Date(), new Date()]; 
 		const res = db.mysql(query, value)
 			.then((res)=>{
 				return true;
@@ -19,34 +39,26 @@ const portal = {
 			})
 		return res;
 	},
-	saveRiderUser: async  (data)=>{
-		console.log(data);
-		const query = " INSERT INTO riders (firstname, lastname, email, password, createdAt, updatedAt) VALUES (?, ?, ?, ?, ?, ?)";
-		const value =  [data.fname, data.lname, data.email,  md5(data.pass), new Date(), new Date()]; 
+
+	checkUser: async (data) =>{
+		const query = "SELECT * FROM users WHERE email =? AND password = ?"; 
+		const value = [data.email, md5(data.pass)]; 
 		const res = db.mysql(query, value)
 			.then((res)=>{
-				return true;
+				if(res.length) {
+					return res;
+				}
+				else{
+					return false;
+				}
 			})
 			.catch((err)=>{
 				console.log(err)
 				return false;
 			})
 		return res;
-	}, 
-	saveCustomerUser: async  (data)=>{
-		console.log(data);
-		const query = " INSERT INTO customers (firstname, lastname, email, password, createdAt, updatedAt) VALUES (?, ?, ?, ?, ?, ?)";
-		const value =  [data.fname, data.lname, data.email,  md5(data.pass), new Date(), new Date()]; 
-		const res = db.mysql(query, value)
-			.then((res)=>{
-				return true;
-			})
-			.catch((err)=>{
-				console.log(err)
-				return false;
-			})
-		return res;
-	}, 
+	}
+
 
 }
 

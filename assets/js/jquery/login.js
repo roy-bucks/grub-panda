@@ -1,76 +1,51 @@
 $(document).ready(function(){
 
+    const validation = ()=>{
 
-    
+        let validate = true; 
 
+        if(validator.isEmpty($(".user-pass").val())){
+            validate = false;
+            $(".user-pass").addClass("is-invalid");
+        }
+        else{
+            $(".user-pass").removeClass("is-invalid");
+        }
 
+        if(! validator.isEmail($(".user-email").val())){
+            validate = false;
+            $(".user-email").addClass("is-invalid");
+        }
+        else{
+            $(".user-email").removeClass("is-invalid");
+        }
 
-    function submitLogin(){
+        return validate;
+    }
 
-        let user_name = $(".username").val(); 
-        let pass = $(".password").val();
-        $.post("/login/validate", {user_name, pass}, function(res){
-            if(res){
-                if(res.multi_user){
-                    //modal 
-                        $(".option1").text(res.options[0].toUpperCase())  
-                        $(".option2").text(res.options[1].toUpperCase())
-                        $(".name").text(res.name);
-                        $(".login-selection").modal("show");
-                                      
-                }
-                else{
-                    location.replace(res.redirect); 
-                }
+    const login = () => {
+
+        $.post("/api/login", {
+            email: $(".user-email").val(), 
+            pass: $(".user-pass").val()
+        }, (res)=>{
+            if(res.success){
+                alert(res.data.message);
             }
             else{
-                // $(".error-selection").modal('show');   
-                $(".username").addClass("is-invalid"); 
-                $(".password").addClass("is-invalid");
+                $(".error-modal").modal("show");
+                $(".error-message").text(res.data.message);
             }
-            
-
-
-            $(".login-load").addClass("d-none");
-            $(".login").removeClass("d-none");
-
-
         })
     }
 
-
-    //show password
-    function showpassword(){
-        let show = $(".password").attr('type'); 
-        if(show == "password"){
-            $(".password").attr('type', "text");
-        }
-        else{
-            $(".password").attr('type', "password");
-        }
-    }
-
-
-
-    $(".login").click(function(){
-        $(this).addClass("d-none");
-        $(".login-load").removeClass("d-none");
-        submitLogin(); 
+    $(".signin").click(function(){
+        let isvalid = validation(); 
+        if(isvalid) login();
     })
 
 
-    $(".showPassword").click(function(){
-        showpassword(); 
-    })
-
-
-
-    //This function remove the invalid trace
-    $(".username").keyup(function(){
-        $(this).removeClass("is-invalid"); 
-    })
-
-    $(".password").keyup(function(){
+    $(".rqrd").keyup(function(){
         $(this).removeClass("is-invalid");
     })
 })

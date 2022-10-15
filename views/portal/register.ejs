@@ -106,13 +106,29 @@
     <!-- page-body-wrapper ends -->
 
 
-    <div class="modal user-selection-modal show" tabindex="-1">
-      <div class="modal-dialog">
+    <div class="modal user-selection-modal success-modal" tabindex="-1">
+      <div class="modal-dialog modal-sm">
         <div class="modal-content">
           <div class="modal-body">
-            <div class="d-flex justify-content-center"> 
-              <i class="bi bi-check-circle-fill"></i>
-              <p class="fw-bold">Successfully Registered!</p>
+            <div class="d-flex flex-column align-items-center"> 
+              <i class="bi bi-check-circle-fill fs-1 text-success"></i>
+              <p class="fw-bold ms-2 fs-6">Registered</p>
+              <p>You can now sign in</p>
+              <a class="btn btn-primary w-50" href="/login" role="button">Sign In</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="modal user-selection-modal error-modal" tabindex="-1">
+      <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+          <div class="modal-body">
+            <div class="d-flex flex-column align-items-center"> 
+              <i class="bi bi-exclamation-circle-fill fs-1 text-danger"></i>
+              <p class="fw-bold ms-2 fs-6 error-message"></p>
+              <a class="btn btn-primary w-50" href="/register" role="button">Try again</a>
             </div>
           </div>
         </div>

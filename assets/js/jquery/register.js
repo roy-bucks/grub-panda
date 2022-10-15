@@ -1,5 +1,6 @@
 $(document).ready(function(){
 
+    $(".success-modal").modal("show");
 
 
     const registerSetup = (userType)=>{
@@ -61,9 +62,11 @@ $(document).ready(function(){
         
         if(userType == "Merchant"){
             userData = {
-                merchant: $(".user-merchant").val(), 
+                fname: $(".user-merchant").val(), 
+                lname: "",
                 email: $(".user-email").val(), 
                 pass: $(".user-pass").val(),
+                userType: userType
             }
         }
         else{
@@ -72,17 +75,22 @@ $(document).ready(function(){
                 fname: $(".user-fname").val(), 
                 email: $(".user-email").val(), 
                 pass: $(".user-pass").val(),
+                userType: userType
             }
         }
 
 
-        console.log("I am here")
-
        $.post("/api/register", {
-            userType: userType, 
-            userData: userData,
+         userData,
        }, (res)=>{
-            console.log("response: ", res)
+            if(res.success){
+                $(".success-modal").modal("show")
+            }
+            else{
+                $(".error-message").text(res.message);
+                $(".error-modal").modal("show")
+
+            }
        })
     }
 
@@ -93,7 +101,7 @@ $(document).ready(function(){
 
     let userSelected = ''; 
 
-    // $(".user-selection-modal").modal('show');
+    $(".user-selection-modal").modal('show');
     $(".user-selection").click(function(){
         $(this)
             .addClass("border-primary")

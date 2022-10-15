@@ -16,6 +16,7 @@ const db = {
                 if(!error){
                         resolve(result);
                 }else{
+                        console.log(error);
                         reject(false); 
                 }
             });

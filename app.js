@@ -3,11 +3,23 @@ const route = require('./routes');
 const bodyParser = require('body-parser'); 
 const path = require("path"); // path module
 const mysql = require("mysql");
+const sessions = require('express-session'); 
+const MySQLStore = require('express-mysql-session')(sessions);
 require('dotenv').config(); 
 
 
+
+const dbOptions = require("./config/session");
+const sessionStore = new MySQLStore(dbOptions); 
+const {
+	SESS_NAME = 'sid',
+	SESS_SECRET = "createdbycent",
+	SESS_LIFETIME = 1000 * 60 * 60 * 24,  //Session is 24 hours
+} = process.env
+
+
 const app = express();
-const port = 8000;
+const port = 3000;
 
 let db_con  = mysql.createConnection({
   host: process.env.Host,
