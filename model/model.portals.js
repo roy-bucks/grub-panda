@@ -6,24 +6,47 @@ var md5 = require('md5');
 
 const portal = {
 
-    validate_user: async function(data){
-        
-        const query = "SELECT * FROM enrollusertbl WHERE userName = ? AND userpasswd = ?";
-		const value = [data.user, md5(data.pass)]; 
+	saveMerchantUser: async  (data)=>{
+		const query = " INSERT INTO merchants (name, email, password, createdAt, updatedAt) VALUES (?, ?, ?, ?, ?)";
+		const value =  [data.merchant, data.email, md5(data.pass), new Date(), new Date()]; 
 		const res = db.mysql(query, value)
-			.then(function(res){
-				if(res.length){
-                    return res[0]; 
-                }
-                else{
-                    return false; 
-                }
+			.then((res)=>{
+				return true;
 			})
-			.catch(function(error){
-				return false; 
+			.catch((err)=>{
+				console.log(err)
+				return false;
 			})
 		return res;
-    }
+	},
+	saveRiderUser: async  (data)=>{
+		console.log(data);
+		const query = " INSERT INTO riders (firstname, lastname, email, password, createdAt, updatedAt) VALUES (?, ?, ?, ?, ?, ?)";
+		const value =  [data.fname, data.lname, data.email,  md5(data.pass), new Date(), new Date()]; 
+		const res = db.mysql(query, value)
+			.then((res)=>{
+				return true;
+			})
+			.catch((err)=>{
+				console.log(err)
+				return false;
+			})
+		return res;
+	}, 
+	saveCustomerUser: async  (data)=>{
+		console.log(data);
+		const query = " INSERT INTO customers (firstname, lastname, email, password, createdAt, updatedAt) VALUES (?, ?, ?, ?, ?, ?)";
+		const value =  [data.fname, data.lname, data.email,  md5(data.pass), new Date(), new Date()]; 
+		const res = db.mysql(query, value)
+			.then((res)=>{
+				return true;
+			})
+			.catch((err)=>{
+				console.log(err)
+				return false;
+			})
+		return res;
+	}, 
 
 }
 
