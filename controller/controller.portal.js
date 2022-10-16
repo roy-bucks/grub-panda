@@ -19,7 +19,7 @@ const portal = {
     newUser: async (req, res) =>{
         
         //validation 
-        exist = await modalPortal.checkEmail(req.body.userData.email, req.body.userData.pass); 
+        let exist = await modalPortal.checkEmail(req.body.userData.email, req.body.userData.pass); 
         if(exist){
             res.send({
                 success: false,
@@ -27,7 +27,7 @@ const portal = {
             })
         }
         else{
-            response = await modalPortal.saveNewUser(req.body.userData);
+            let response = await modalPortal.saveNewUser(req.body.userData);
             if(response){
                 res.send({
                     success: true,
@@ -45,7 +45,7 @@ const portal = {
     loginProcess: async (req, res) =>{
 
         //check from user 
-        user = await modalPortal.checkUser(req.body);
+        let user = await modalPortal.checkUser(req.body);
         if(user){
             res.send({
                 success: true, 
